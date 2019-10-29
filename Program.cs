@@ -21,7 +21,12 @@ namespace BlogsConsole
                 Console.WriteLine("Press 2 to add a Blog: ");
                 Console.WriteLine("Press 3 to Create a post: ");
                 Console.WriteLine("Press 4 to Exit Program:");
-                int input = Int32.Parse(Console.ReadLine());
+                int input = 0;
+                string fix = Console.ReadLine();
+                if (!int.TryParse(fix,out input))
+                {
+                    logger.Error("failed to parse int");
+                }
 
                 try
                 {
