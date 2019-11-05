@@ -22,17 +22,12 @@ namespace BlogsConsole
                 Console.WriteLine("Press 3 to Create a post: ");
                 Console.WriteLine("Press 4 to display post: ");
                 Console.WriteLine("Enter q to quit: ");
-                int input = 0;
-                string fix = Console.ReadLine();
-                if (!int.TryParse(fix,out input))
-                {
-                    logger.Error("failed to parse int");
-                }
-
+                var input = Console.ReadLine();
+               
                 try
                 {
 
-                    if (input == 1)
+                    if (input == "1")
                     {
                         var db = new BloggingContext();
                         // Display all Blogs from the database
@@ -46,7 +41,7 @@ namespace BlogsConsole
                             Console.WriteLine(item.Name);
                         }
                     }
-                    else if (input == 2)
+                    else if (input == "2")
                     {
                         // Create and save a new Blog
                         Console.Write("Enter a name for a new Blog: ");
@@ -67,7 +62,7 @@ namespace BlogsConsole
                         }
                     }
 
-                    else if (input == 3)
+                    else if (input == "3")
                     {
                         //Create and save new Post
                         var db = new BloggingContext();
@@ -123,17 +118,61 @@ namespace BlogsConsole
                             }
                         }
                     }
-                    else if (input == 4)
+                    else if (input == "4")
                     {
                         //display Post
-                        var db = new BloggingContext();
+                        var db1 = new BloggingContext();
 
-                        var query = db.Posts.OrderBy(p => p.Content);
+                        var query = db1.Posts.OrderBy(p => p.Content);
+                        Console.WriteLine("Press 0 to Post from all Blogs: ");
+
+                        var query1 = db1.Blogs;
+
+
+                        foreach (var item in query1)
+                        {
+                            Console.WriteLine("Press {0} for {1} Post:",item.BlogId,item.Name);
+
+                        }
+
+                            int input1 = 0;
+                        string fix1 = Console.ReadLine();
+                        if (!int.TryParse(fix1, out input1))
+                        {
+                            logger.Error("failed to parse int");
+                        }
+                        if (input1 == 0)
+                        {
+                            Console.WriteLine("All Posts in the database:");
+                            int num = query.Count();
+
+
+                            Console.WriteLine($"{num} Post(s) returned: ");
+                            foreach (var item in query)
+                            {
+                                Console.WriteLine(item.Content);
+                            }
+                        }
+                        else
+                        {
+                            var query2 = db1.Posts.Where(p => p.BlogId == input1);
+                            int num = query2.Count();
+
+
+                            Console.WriteLine($"{num} Post(s) returned: ");
+                            foreach (var item in query2)
+                            {
+                                Console.WriteLine(item.Content);
+                            }
+                        }
+
 
                     }
-                    else if (input == 'q')
+                    else if (input == "q")
                     {
                         cont = false;
+                        logger.Info("Program ended");
+
                     }
 
                 }
@@ -141,7 +180,6 @@ namespace BlogsConsole
                 {
                     logger.Error(ex.Message);
                 }
-                logger.Info("Program ended");
             } while (cont);
         }
     }
